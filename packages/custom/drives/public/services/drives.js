@@ -1,9 +1,15 @@
 'use strict';
 
-angular.module('mean.drives').factory('Drives', [
-  function() {
-    return {
-      name: 'drives'
-    };
+//Drives service used for drives REST endpoint
+angular.module('mean.drives').factory('Drives', ['$resource',
+  function($resource) {
+    return $resource('drives/:driveId', {
+      driveId: '@_id'
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    });
   }
 ]);
+

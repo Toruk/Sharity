@@ -20,6 +20,9 @@ var DriveSchema = new Schema({
     required: true,
     trim: true
   },
+  public: {
+    type: Boolean,
+  },
   files: [{
     type: Schema.ObjectId,
     ref: 'File',
@@ -37,13 +40,25 @@ DriveSchema.path('name').validate(function(name) {
   return !!name;
 }, 'Name cannot be blank');
 
+DriveSchema.path('users').validate(function(users) {
+  // Check if user is in db
+  return true;
+}, 'Username must be valid');
+
 /**
  * Statics
  */
 DriveSchema.statics.load = function(id, cb) {
-  this.findOne({
-    _id: id
-  }).populate('user', 'name username').exec(cb);
+  if (mongoose.Types.ObjectId.isValid(id))
+  {
+    this.findOne({
+      _id: id
+    }).populate('users', 'name username').exec(cb);
+  }
+  else
+  {
+    console.log('404!!');
+  }
 };
 
 mongoose.model('Drive', DriveSchema);

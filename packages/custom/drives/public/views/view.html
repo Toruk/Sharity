@@ -1,0 +1,23 @@
+<section data-ng-controller="DrivesController" data-ng-init="findOne()">
+  <spam>{{drive.created | date:'medium'}}</span> /
+  <span data-ng-repeat="user in drive.users">{{user.name}}{{$last ? '' : ', '}}</span>
+  <h2>{{drive.name}}</h2>
+  <!-- <div data-ng-if="hasAuthorization(drive)"> -->
+  <!--   <a class="btn" href="/#!/drives/{{drive._id}}/edit"> -->
+  <!--     <i class="glyphicon glyphicon-edit"></i> -->
+  <!--   </a> -->
+  <!--   <a class="btn" data-ng-click="remove(article);"> -->
+  <!--     <i class="glyphicon glyphicon-trash"></i> -->
+  <!--   </a> -->
+  <!-- </div> -->
+  <ul class="files unstyled">
+    <li data-ng-repeat="file in drive.files">
+      <span>{{file.created | date:'medium'}}</span> /
+      <span>{{file.user.name}}</span>
+      <h3>
+	<a data-ng-href="#!/files/{{file._id}}">{{file.name}}</a>
+      </h3>
+    </li>
+  </ul>
+  <h3 data-ng-hide="!drive.files || drive.files.length">No files yet. <br> Why don't you <a href="/#!/files/upload">Upload One</a>?</h3>
+</section>

@@ -1,0 +1,20 @@
+<section data-ng-controller="DrivesController" data-ng-init="find()">
+  <ul class="drives unstyled">
+    <li data-ng-repeat="drive in drives">
+      <span>{{drive.created | date:'medium'}}</span> /
+      <span data-ng-repeat="user in drive.users">{{user.name}}{{$last ? '' : ', '}}</span>
+      <h2>
+        <a data-ng-href="/#!/drives/{{drive._id}}">{{drive.name}}</a>
+        <!-- <span data-ng-if="hasAuthorization(drive)"> -->
+        <!--   <a class="btn" href="/#!/drives/{{drive._id}}/edit"> -->
+        <!--     <i class="glyphicon glyphicon-edit"></i> -->
+        <!--   </a> -->
+        <!--   <a class="btn" data-ng-click="remove(article);"> -->
+        <!--     <i class="glyphicon glyphicon-trash"></i> -->
+        <!--   </a> -->
+        <!-- </span> -->
+      </h2>
+    </li>
+  </ul>
+  <h2 data-ng-hide="!drives || drives.length">No drives yet. <br> Why don't you <a href="/#!/drives/create">Create One</a>?</h2>
+</section>
