@@ -7,14 +7,17 @@ var Module = require('meanio').Module;
 
 var Drives = new Module('drives');
 
+var multer  = require('multer');
+
 /*
  * All MEAN packages require registration
  * Dependency injection is used to define required modules
  */
 Drives.register(function(app, auth, database) {
 
-  //We enable routing. By default the Package Object is passed to the routes
-  Drives.routes(app, auth, database);
+
+  Drives.aggregateAsset('css', 'drives.css');
+  Drives.angularDependencies(['angular-file-upload', 'ng-tags-input']);
 
   //We are adding a link to the main menu for all authenticated users
   Drives.menus.add({
@@ -24,7 +27,17 @@ Drives.register(function(app, auth, database) {
     menu: 'main',
   });
   
-  Drives.aggregateAsset('css', 'drives.css');
+  app.use(multer({ dest: './drives/',
+    rename: function (fieldname, filename) {
+      return filename+Date.now();
+    },
+    onFileUploadStart: function (file) {
+      console.log(file.originalname + ' is starting ...');
+    },
+    onFileUploadComplete: function (file) {
+      console.log(file.fieldname + ' uploaded to  ' + file.path);
+    }
+  }));
 
   /**
     //Uncomment to use. Requires meanio@0.3.7 or above
@@ -47,6 +60,10 @@ Drives.register(function(app, auth, database) {
         //you now have the settings object
     });
     */
+
+  //We enable routing. By default the Package Object is passed to the routes
+  Drives.routes(app, auth, database);
+
 
   return Drives;
 });

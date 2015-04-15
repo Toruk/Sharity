@@ -19,7 +19,9 @@ module.exports = function(Drives, app, auth, database) {
     .post(auth.requiresLogin, drives.create);
 
   app.route('/drives/:driveId')
-    .get(auth.isMongoId, drives.show);
+    .get(auth.isMongoId, drives.show)
+    .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, drives.update)
+    .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, drives.destroy);
 
   //Setting up the driveId param
   app.param('driveId', drives.drive);

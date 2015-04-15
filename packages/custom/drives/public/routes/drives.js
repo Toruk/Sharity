@@ -7,11 +7,12 @@ angular.module('mean.drives').config([
       var deferred = $q.defer();
       
       $http.get('/loggedin').success(function(user) {
-	if (user !== '0') $timeout(deferred.resolve);
-	else {
-	  $timeout(deferred.reject);
-	  $location.url('/login');
-	}
+        if (user !== '0')
+          $timeout(deferred.resolve);
+        else {
+          $timeout(deferred.reject);
+          $location.url('/login');
+        }
       });
       
       return deferred.promise;
@@ -19,25 +20,39 @@ angular.module('mean.drives').config([
 
     $stateProvider
       .state('drives root', {
-	url: '/drives',
-	templateUrl: 'drives/views/list.html',
-	resolve: {
-	  loggedin: checkLoggedIn
-	}
+        url: '/drives',
+        templateUrl: 'drives/views/list.html',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
       })
       .state('create drive', {
-	url: '/drives/create',
-	templateUrl: 'drives/views/create.html',
-	resolve: {
-	  loggedin: checkLoggedIn
-	}
+        url: '/drives/create',
+        templateUrl: 'drives/views/create.html',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
+      })
+      .state('edit drive', {
+        url: '/drives/:driveId/edit',
+        templateUrl: 'drives/views/edit.html',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
+      })
+      .state('upload on drive', {
+        url: '/drives/:driveId/upload',
+        templateUrl: 'drives/views/upload.html',
+        resolve: {
+          loggedin: checkLoggedIn
+        }	
       })
       .state('drive by id', {
-	url: '/drives/:driveId',
-	templateUrl: 'drives/views/view.html',
-	resolve: {
-	  loggedin: checkLoggedIn
-	}
+        url: '/drives/:driveId',
+        templateUrl: 'drives/views/view.html',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
       });
   }
 ]);

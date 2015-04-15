@@ -125,6 +125,23 @@ exports.user = function(req, res, next, id) {
 };
 
 /**
+ * Find user by name
+ */
+exports.search = function(req, res, next) {
+  if (req.partialusername.len < 3)
+    return res.json([]);
+
+  User.find({username: new RegExp('^'+req.partialusername+'', "i")}, function(err, users) {
+    if (err)
+      return next(err);
+    
+    return res.json(users.map(function(user) {
+      return {'_id': user._id, 'username': user.username}
+    }));
+  });
+};
+
+/**
  * Resets the password
  */
 

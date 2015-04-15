@@ -1,27 +1,21 @@
 'use strict';
 
+var drives = require('../../../drives/server/controllers/drives');
+var files = require('../controllers/files');
+
 /* jshint -W098 */
 // The Package is past automatically as first parameter
 module.exports = function(Files, app, auth, database) {
 
-  app.get('/files/example/anyone', function(req, res, next) {
-    res.send('Anyone can access this');
-  });
+  app.route('/drives/:driveId/files')
+    .get(files.all)
+    .post(files.create);
+  app.route('/drives/:driveId/files/:fileId')
+    .get(auth.isMongoId, files.show)
+    .put(auth.isMongoId, auth.requiresLogin, files.update)
+    .delete(files.destroy);
 
-  app.get('/files/example/auth', auth.requiresLogin, function(req, res, next) {
-    res.send('Only authenticated users can access this');
-  });
+  app.param('driveId', drives.drive);
+  app.param('fileId', files.file);
 
-  app.get('/files/example/admin', auth.requiresAdmin, function(req, res, next) {
-    res.send('Only users with Admin role can access this');
-  });
-
-  app.get('/files/example/render', function(req, res, next) {
-    Files.render('index', {
-      package: 'files'
-    }, function(err, html) {
-      //Rendering a view from the Package server/views
-      res.send(html);
-    });
-  });
 };

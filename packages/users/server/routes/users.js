@@ -8,6 +8,15 @@ module.exports = function(MeanUser, app, auth, database, passport) {
 
   app.route('/logout')
     .get(users.signout);
+
+  app.route('/users/search/:partialusername')
+    .get(users.search);
+
+  app.param('partialusername', function(req, res, next, partialusername) {
+    req.partialusername = partialusername;
+    next();
+  });
+  
   app.route('/users/me')
     .get(users.me);
 

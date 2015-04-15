@@ -20,14 +20,15 @@ var FileSchema = new Schema({
     required: true,
     trim: true
   },
-  drive: {
+  drive: {  // parent drive
     type: Schema.ObjectId,
     ref: 'Drive',
     required: true,
   },
-  creator: {
+  user: { // user who uploaded the file
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true,
   }
 });
 
@@ -52,3 +53,4 @@ FileSchema.statics.load = function(id, cb) {
 };
 
 mongoose.model('File', FileSchema);
+

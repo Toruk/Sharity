@@ -13,17 +13,6 @@ var Files = new Module('files');
  */
 Files.register(function(app, auth, database) {
 
-  //We enable routing. By default the Package Object is passed to the routes
-  Files.routes(app, auth, database);
-
-  //We are adding a link to the main menu for all authenticated users
-  Files.menus.add({
-    title: 'Upload',
-    link: 'file upload',
-    roles: ['authenticated'],
-    menu: 'main',
-  });
-  
   Files.aggregateAsset('css', 'files.css');
 
   /**
@@ -47,6 +36,10 @@ Files.register(function(app, auth, database) {
         //you now have the settings object
     });
     */
+
+  //We enable routing. By default the Package Object is passed to the routes
+  Files.routes(app, auth, database);
+
 
   return Files;
 });

@@ -1,7 +1,7 @@
 {
   "name": "files",
   "version": "0.0.1",
-  "description": "File object upload and management",
+  "description": "",
   "author": {
     "name": ""
   },
@@ -11,8 +11,6 @@
     "npm": "1.4.x"
   },
   "dependencies": {
-    "express": "~4.10.2",
-    "multer": "~0.1.6"
-  }
+  },
   "license": "MIT"
 }

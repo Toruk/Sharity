@@ -5,14 +5,14 @@
       <span data-ng-repeat="user in drive.users">{{user.name}}{{$last ? '' : ', '}}</span>
       <h2>
         <a data-ng-href="/#!/drives/{{drive._id}}">{{drive.name}}</a>
-        <!-- <span data-ng-if="hasAuthorization(drive)"> -->
-        <!--   <a class="btn" href="/#!/drives/{{drive._id}}/edit"> -->
-        <!--     <i class="glyphicon glyphicon-edit"></i> -->
-        <!--   </a> -->
-        <!--   <a class="btn" data-ng-click="remove(article);"> -->
-        <!--     <i class="glyphicon glyphicon-trash"></i> -->
-        <!--   </a> -->
-        <!-- </span> -->
+        <span data-ng-if="hasAuthorization(drive)">
+          <a class="btn" href="/#!/drives/{{drive._id}}/edit">
+            <i class="glyphicon glyphicon-edit"></i>
+          </a>
+          <a class="btn" data-ng-click="remove(drive);">
+            <i class="glyphicon glyphicon-trash"></i>
+          </a>
+        </span>
       </h2>
     </li>
   </ul>

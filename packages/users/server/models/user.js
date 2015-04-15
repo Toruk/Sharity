@@ -106,6 +106,13 @@ UserSchema.pre('save', function(next) {
 });
 
 /**
+ * Statics
+ */
+UserSchema.statics.findByName = function(username, cb) {  
+  console.log('*** '+this.findOne({ username: username }).exec(cb));
+};
+
+/**
  * Methods
  */
 UserSchema.methods = {
@@ -180,4 +187,3 @@ UserSchema.methods = {
 };
 
 mongoose.model('User', UserSchema);
-
