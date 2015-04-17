@@ -1,22 +1,25 @@
 <section data-ng-controller="DrivesController" data-ng-init="findOne()">
 
   <div class="row">
-    <div class="col-md-6">
-      <h2>Drive {{drive.name}}</h2>
+    <div class="col-md-7">
+      <h2>
+        <span>Drive {{drive.name}}</span>
+        <span data-ng-if="hasAuthorization(drive)">
+          <a class="btn" href="/#!/drives/{{drive._id}}/edit">
+            <i class="glyphicon glyphicon-edit"></i>
+          </a>
+          <a class="btn" data-ng-click="remove(drive);">
+            <i class="glyphicon glyphicon-trash"></i>
+          </a>
+        </span>
+      </h2>
       <span>{{drive.created | date:'medium'}}</span> /
-      <span data-ng-if="hasAuthorization(drive)">
-        <a class="btn" href="/#!/drives/{{drive._id}}/edit">
-          <i class="glyphicon glyphicon-edit"></i>
-        </a>
-        <a class="btn" data-ng-click="remove(drive);">
-          <i class="glyphicon glyphicon-trash"></i>
-        </a>
-      </span>
+      <span data-ng-if="!drive.public">{{drive.created_by.username}}</span>
 
       <ul class="files unstyled">
         <li data-ng-repeat="file in drive.files">
           <span>{{file.created | date:'medium'}}</span> /
-          <span>{{file.user.name}}</span>
+          <span>{{file.user.username}}</span>
           <h3>
             <a data-ng-href="#!/files/{{file._id}}">{{file.name}}</a>
           </h3>
@@ -25,9 +28,9 @@
     </div>
 
     <!-- Right panel -->
-    <div class="col-md-6" style="margin-bottom: 40px;">
+    <div class="col-md-5" style="margin-bottom: 40px;">
   
-      <h3>Share with</h3>
+      <h3>Shared with</h3>
 
       <form name="shareDriveForm" class="col-md-12" role="form" data-ng-submit="update(shareDriveForm.$valid)" novalidate>
         <!-- Public/Private -->
@@ -47,17 +50,16 @@
         </div>
 
         <!-- Users -->
-        <div ng-show="!drive.public">
+        <div data-ng-show="!drive.public" class="col-md-11">
           <div class="col-md-11">
             <div class="form-group form-horizontal" ng-class="{ 'has-error' : submitted && shareDriveForm.users.$invalid }">
-              <label for="users" class="col-md-2 control-label">Users</label>
-              <div class="col-md-10">
-                <tags-input name="users" id="users" ng-model="drive.users" key-property="_id" display-property="username" add-from-autocomplete-only="true" placeholder="Martin, John, ...">
+              <!-- <label for="users" class="col-md-3 control-label">Users</label> -->
+              <div class="col-md-12">
+                <tags-input name="users" id="users" ng-model="drive.users" key-property="_id" display-property="username" add-from-autocomplete-only="true" placeholder="Miranda, John, ...">
                   <auto-complete source="autocompleteUser($query)"></auto-complete>
                 </tags-input>
                 <div ng-show="submitted && shareDriveForm.users.$invalid" class="help-block">
-                  <p ng-repeat="error in shareDriveForm.errors">error: {{ error }}</p>
-                  <!--<p ng-show="shareDriveForm.users.$error.invalid">Username is invalid</p>-->
+                  <p>Please enter a valid username</p>
                 </div>
               </div>
             </div>

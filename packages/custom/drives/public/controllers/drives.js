@@ -10,20 +10,22 @@ angular
     };
     
     $scope.global = Global;
-    
+
     $scope.hasAuthorization = function(drive) {
       if (!drive)
         return false;
 
       function isUserAuthorized() {
-        for (var i = 0; i < drive.users.length; i += 1) {
-          if (drive.users[i]._id === $scope.global.user._id)
-            return true;
-        }
+        console.log("is user authorized ?");
+        console.log(drive);
+        if (drive.created_by._id === $scope.global.user._id)
+          return true;
         return false;
       }
 
-      return drive.public || $scope.global.isAdmin || isUserAuthorized();
+      console.log(drive);
+      return $scope.global.isAdmin || (drive.created_by._id === $scope.global.user._id);
+      // return drive.public || $scope.global.isAdmin || isUserAuthorized();
     };
 
     $scope.create = function(isValid) {
@@ -56,16 +58,12 @@ angular
         if (drive.public) {
           drive.users = [];
         }
-        $scope.shareDriveForm.errors = ['update', 'valid'];
         $scope.submitted = true;
         drive.$update(function(response) {
-          console.log('alo');
           console.log('update response:'+JSON.stringify(response));
           $location.path('drives/' + drive._id);
         });
       } else {
-          console.log('update response:'+null);
-        $scope.shareDriveForm.errors = ['a', 'invalid'];
         $scope.submitted = true;
       }
     };

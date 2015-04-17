@@ -51,7 +51,7 @@ angular.module('mean.drives').config([
         url: '/drives/:driveId',
         templateUrl: 'drives/views/view.html',
         resolve: {
-          loggedin: checkLoggedIn
+          loggedin: checkLoggedIn,
         }
       });
   }

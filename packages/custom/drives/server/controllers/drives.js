@@ -24,8 +24,8 @@ exports.drive = function(req, res, next, id) {
  */
 exports.create = function(req, res) {
   var drive = new Drive(req.body);
-  drive.users = drive.users || [];
-  drive.users.push(req.user);
+  drive.users = [];
+  drive.created_by = req.user;
 
   console.log(req.body);
 
@@ -102,7 +102,9 @@ exports.show = function(req, res) {
  * List of Drives
  */
 exports.all = function(req, res) {
-  Drive.find().sort('-created').populate('users', 'name username').exec(function(err, drives) {
+  Drive.find()
+    .or([{ created_by: req.user }, { 'users': {$in: [req.user]}}])
+    .sort('-created').populate('created_by users', 'name username').exec(function(err, drives) {
     if (err) {
       return res.status(500).json({
         error: 'Cannot list the drives'

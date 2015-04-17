@@ -5,8 +5,7 @@
  */
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
-  fs = require('fs'),
-  Users = mongoose.models.User;
+  fs = require('fs');
 
 /**
  * Drive Schema
@@ -15,6 +14,10 @@ var DriveSchema = new Schema({
   created: {
     type: Date,
     default: Date.now
+  },
+  created_by: {
+    type: Schema.ObjectId,
+    ref: 'User'
   },
   name: {
     type: String,
@@ -40,33 +43,6 @@ DriveSchema.path('name').validate(function(name) {
 DriveSchema.path('users').validate(function(users, respond) {
   
   respond(true);
-  /*
-  Users
-    .where('username')
-    .in(users.map(function(user) { return user.username }))
-    .exec(function (err, records) {
-      for (user in records) {
-        
-      }
-    });
-
-
-  var name = users[0].username;
-  var query = mongoose.models.User.where({ username: name });
-  return query.findOne(function (err, user) {
-    if (!user) {
-      console.log('invalid user');
-      respond(false);
-    } else {
-      console.log('valid user');
-      respond(true);
-    }
-  });*/
-  // mongoose.models.User.findByName(name, function(err, user) {
-  //   console.log('user: '+user);
-  //   res = user ? true : false;
-  //   return res;
-  // });
 }, 'Username must be valid');
 
 /**
@@ -77,7 +53,8 @@ DriveSchema.statics.load = function(id, cb) {
   {
     this.findOne({
       _id: id
-    }).populate('users', 'name username').exec(cb);
+    // }).populate([{ path: 'users', select: 'name username' }, { path: 'creator', select: 'name username' }]).exec(cb);
+    }).populate('created_by', 'name username').populate('users', 'name username').exec(cb);
   }
 };
 

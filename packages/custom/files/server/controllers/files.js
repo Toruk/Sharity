@@ -97,10 +97,13 @@ exports.show = function(req, res) {
 };
 
 /**
- * List of Files
+ * List of Files of a drive
  */
 exports.all = function(req, res) {
-  File.find().sort('-created').populate('user', 'name username').exec(function(err, files) {
+  File.find().where({'drive': req.drive}).equals(req.drive._id)
+    .sort('-created')
+    .populate('user', 'name username')
+    .exec(function(err, files) {
     if (err) {
       return res.status(500).json({
         error: 'Cannot list the files'

@@ -4,7 +4,9 @@ var drives = require('../controllers/drives');
 
 // Drive authorization helpers
 var hasAuthorization = function(req, res, next) {
-  if (!req.user.isAdmin && req.drive.users.indexOf(req.user.id)!== -1) {
+  console.log('alo');
+  console.log(req.drive);
+  if (!(req.user.isAdmin || req.drive.created_by.id !== req.user.id)) {
     return res.status(401).send('User is not authorized');
   }
   next();
