@@ -15,9 +15,9 @@ module.exports = {
     name: 'Sharity'
   },
   facebook: {
-    clientID: 'DEFAULT_APP_ID',
-    clientSecret: 'APP_SECRET',
-    callbackURL: 'http://localhost:3000/auth/facebook/callback'
+    clientID: '1595291077350487',
+    clientSecret: '8d4d1a894571ab473dc579cba1b94020',
+    callbackURL: 'http://benoitguina.fr:3000/auth/facebook/callback'
   },
   twitter: {
     clientID: 'DEFAULT_CONSUMER_KEY',
