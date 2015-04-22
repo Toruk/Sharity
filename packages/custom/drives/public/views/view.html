@@ -15,8 +15,8 @@
         </span>
       </h2>
       <small>Created on {{drive.created | date:'medium'}}</small>
-      <div data-ng-if="!drive.public && drive.users.length">
-        <small>Shared with <span data-ng-repeat="user in drive.users">{{user.username}}{{$last ? '' : ', '}}</span><span data-ng-hide="drive.users.length">none</small>
+      <div data-ng-if="!drive.public">
+        <small>Shared with <span data-ng-repeat="user in drive.users">{{user.username}}{{$last ? '' : ', '}}</span><span data-ng-hide="!drive.users.length">none</small>
       </div>
 
       <ul class="files unstyled">
