@@ -15,9 +15,9 @@ module.exports = {
     name: 'Sharity'
   },
   facebook: {
-    clientID: 'DEFAULT_APP_ID',
-    clientSecret: 'APP_SECRET',
-    callbackURL: 'http://localhost:3000/auth/facebook/callback'
+    clientID: '1595291077350487',
+    clientSecret: '8d4d1a894571ab473dc579cba1b94020',
+    callbackURL: 'http://benoitguina.fr:3000/auth/facebook/callback'
   },
   twitter: {
     clientID: 'DEFAULT_CONSUMER_KEY',
@@ -25,14 +25,14 @@ module.exports = {
     callbackURL: 'http://localhost:3000/auth/twitter/callback'
   },
   github: {
-    clientID: 'DEFAULT_APP_ID',
-    clientSecret: 'APP_SECRET',
-    callbackURL: 'http://localhost:3000/auth/github/callback'
+    clientID: '68f76a3d6c42cb58960e',
+    clientSecret: '9fb4751324924ab758b0892d0f532190d9053f68',
+    callbackURL: 'http://benoitguina.fr:3000/auth/github/callback'
   },
   google: {
-    clientID: 'DEFAULT_APP_ID',
-    clientSecret: 'APP_SECRET',
-    callbackURL: 'http://localhost:3000/auth/google/callback'
+    clientID: '1009945487166-oe160sdr9va1rohetcr1i49uj5i913c9.apps.googleusercontent.com',
+    clientSecret: 'RB659G30SZrSFxgSSnG8cQrh',
+    callbackURL: 'http://benoitguina.fr:3000/auth/google/callback'
   },
   linkedin: {
     clientID: 'DEFAULT_API_KEY',
