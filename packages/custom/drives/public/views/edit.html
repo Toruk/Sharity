@@ -1,0 +1,22 @@
+<section data-ng-controller="DrivesController" data-ng-init="findOne()">
+  <form name="driveForm" class="form-horizontal col-md-6" role="form" data-ng-submit="update(driveForm.$valid)" novalidate>
+
+    <!-- Drive Name -->
+    <div class="form-group" ng-class="{ 'has-error' : submitted && driveForm.name.$invalid }">
+      <label mean-token="'edit-name'" for="name" class="col-md-3 control-label">Name</label>
+      <div class="col-md-9">
+        <input name="name" type="text" class="form-control" data-ng-model="drive.name" id="name" placeholder="Name" required>
+        <div ng-show="submitted && driveForm.name.$invalid" class="help-block">
+          <p ng-show="driveForm.name.$error.required">Name is required</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="form-group">
+      <div class="col-md-offset-3 col-md-9">
+        <button mean-token="'edit-submit'" type="submit" ng-disabled="driveForm.$invalid" class="btn btn-info">Edit</button>
+      </div>
+    </div>
+  </form>
+</section>

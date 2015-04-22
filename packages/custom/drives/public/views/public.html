@@ -1,0 +1,4 @@
+<section data-ng-controller="DrivesController" data-ng-init="findPublic()">
+  <data-ng-include src="'drives/views/partial_list.html'"></data-ng-include>
+  <h2 data-ng-hide="!drives || drives.length">No public drives yet.</h2>
+</section>
