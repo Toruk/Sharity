@@ -72,7 +72,10 @@ module.exports = function(MeanUser, app, auth, database, passport) {
   // Setting the facebook oauth routes
   app.route('/auth/facebook')
     .get(passport.authenticate('facebook', {
-      scope: ['email', 'user_about_me'],
+      scope: [
+        //'user_about_me',
+        'email'
+      ],
       failureRedirect: '#!/login'
     }), users.signin);
 
@@ -108,7 +111,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
     .get(passport.authenticate('google', {
       failureRedirect: '#!/login',
       scope: [
-        'https://www.googleapis.com/auth/userinfo.profile',
+        //'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email'
       ]
     }), users.signin);
@@ -122,7 +125,9 @@ module.exports = function(MeanUser, app, auth, database, passport) {
   app.route('/auth/linkedin')
     .get(passport.authenticate('linkedin', {
       failureRedirect: '#!/login',
-      scope: ['r_emailaddress']
+      scope: [
+        'r_emailaddress'
+      ]
     }), users.signin);
 
   app.route('/auth/linkedin/callback')

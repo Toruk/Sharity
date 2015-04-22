@@ -45,7 +45,7 @@ var escapeProperty = function(value) {
 var UserSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    //required: true,
     get: escapeProperty
   },
   email: {
@@ -187,3 +187,4 @@ UserSchema.methods = {
 };
 
 mongoose.model('User', UserSchema);
+
