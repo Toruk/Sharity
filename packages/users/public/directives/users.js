@@ -6,7 +6,7 @@ angular.module('mean.users').directive('userExists', function ($q, $timeout, $ht
     restrict:'A',
     link: function (scope, el, attrs, ctrl) {
       ctrl.$asyncValidators.userExists = function(value) {
-        console.log("users directive");
+        console.log('users directive');
 	if (ctrl.$isEmpty(value)) return $q.when();
 	var def = $q.defer();
 	$http.get('/users/' + value)

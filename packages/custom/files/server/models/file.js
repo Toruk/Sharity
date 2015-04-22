@@ -17,8 +17,8 @@ var FileSchema = new Schema({
   },
   name: {
     type: String,
-    required: true,
-    trim: true
+    trim: true,
+    required: true
   },
   drive: {  // parent drive
     type: Schema.ObjectId,

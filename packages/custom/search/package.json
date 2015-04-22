@@ -1,9 +1,9 @@
 {
   "name": "search",
   "version": "0.0.1",
-  "description": "Some description of search",
+  "description": "File search module",
   "author": {
-    "name": "mean scaffold"
+    "name": ""
   },
   "mean": "0.4.3",
   "engines": {

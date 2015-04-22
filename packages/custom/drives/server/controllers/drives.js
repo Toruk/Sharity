@@ -15,6 +15,8 @@ exports.drive = function(req, res, next, id) {
     if (err) return next(err);
     if (!drive) return next(new Error('Failed to load drive ' + id));
     req.drive = drive;
+    
+    // files are requested client-side #XXX placeholders
     next();
   });
 };
@@ -95,6 +97,7 @@ exports.destroy = function(req, res) {
  * Show a drive
  */
 exports.show = function(req, res) {
+  req.drive.files = [{'name': 'file1'}, {'name': 'file2'}];
   res.json(req.drive);
 };
 
@@ -104,14 +107,14 @@ exports.show = function(req, res) {
 exports.all = function(req, res) {
   Drive.find()
     .or([{ created_by: req.user }, { 'users': {$in: [req.user]}}])
-    .sort('-created').populate('created_by users', 'name username').exec(function(err, drives) {
-    if (err) {
-      return res.status(500).json({
-        error: 'Cannot list the drives'
-      });
-    }
-    res.json(drives);
-
+    .sort('-created').populate('created_by users', 'name username')
+    .exec(function(err, drives) {
+      if (err) {
+        return res.status(500).json({
+          error: 'Cannot list the drives'
+        });
+      }
+      res.json(drives);
   });
 };
 
