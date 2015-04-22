@@ -40,7 +40,7 @@ DriveSchema.path('name').validate(function(name) {
   return !!name;
 }, 'Name cannot be blank');
 
-DriveSchema.path('users').validate(function(users, respond) {
+DriveSchema.path('users').validate(function(users) {
   return true;
 }, 'Username must be valid');
 

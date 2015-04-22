@@ -26,6 +26,10 @@ angular.module('mean.drives').config([
           loggedin: checkLoggedIn
         }
       })
+      .state('public drives', {
+        url: '/drives/public',
+        templateUrl: 'drives/views/public.html'
+      })
       .state('create drive', {
         url: '/drives/create',
         templateUrl: 'drives/views/create.html',

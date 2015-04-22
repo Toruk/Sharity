@@ -107,7 +107,7 @@ exports.show = function(req, res) {
 exports.all = function(req, res) {
   Drive.find()
     .or([{ created_by: req.user }, { 'users': {$in: [req.user]}}])
-    .sort('-created').populate('created_by users', 'name username')
+    .sort('-created').populate('created_by users', 'username')
     .exec(function(err, drives) {
       if (err) {
         return res.status(500).json({
@@ -118,3 +118,15 @@ exports.all = function(req, res) {
   });
 };
 
+exports.public = function(req, res) {
+  Drive.find({ public: true })
+    .sort('--created').populate('created_by users', 'username')
+    .exec(function(err, drives) {
+      if (err) {
+        return res.status(500).json({
+          error: 'Cannot list the public drives'
+        });
+      }
+      res.json(drives);
+    });
+};

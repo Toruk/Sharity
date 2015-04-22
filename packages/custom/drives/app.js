@@ -26,6 +26,11 @@ Drives.register(function(app, auth, database) {
     roles: ['authenticated'],
     menu: 'main',
   });
+  Drives.menus.add({
+    title: 'Public Drives',
+    link: 'public drives',
+    roles: ['all']
+  });
   
   app.use(multer({ dest: './drives/',
     rename: function (fieldname, filename) {

@@ -1,6 +1,7 @@
 <section data-ng-controller="DrivesController" data-ng-init="findOne()">
 
   <div class="row">
+    <!-- Left panel -->
     <div class="col-md-7">
       <h2>
         <span>Drive {{drive.name}}</span>
@@ -13,16 +14,18 @@
           </a>
         </span>
       </h2>
-      <span>{{drive.created | date:'medium'}}</span> /
-      <span data-ng-if="!drive.public">{{drive.created_by.username}}</span>
+      <small>Created on {{drive.created | date:'medium'}}</small>
+      <div data-ng-if="!drive.public && drive.users.length">
+        <small>Shared with <span data-ng-repeat="user in drive.users">{{user.username}}{{$last ? '' : ', '}}</span><span data-ng-hide="drive.users.length">none</small>
+      </div>
 
       <ul class="files unstyled">
         <li data-ng-repeat="file in drive.files">
-          <span>{{file.created | date:'medium'}}</span> /
-          <span>{{file.user.username}}</span>
           <h3>
             <a data-ng-href="#!/files/{{file._id}}">{{file.name}}</a>
           </h3>
+          <span>{{file.created | date:'medium'}}</span> /
+          <span>{{file.user.username}}</span>
         </li>
       </ul>
     </div>
@@ -30,7 +33,7 @@
     <!-- Right panel -->
     <div class="col-md-5" style="margin-bottom: 40px;">
   
-      <h3>Shared with</h3>
+      <h3>Share with</h3>
 
       <form name="shareDriveForm" class="col-md-12" role="form" data-ng-submit="update(shareDriveForm.$valid)" novalidate>
         <!-- Public/Private -->

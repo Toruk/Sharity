@@ -4,8 +4,6 @@ var drives = require('../controllers/drives');
 
 // Drive authorization helpers
 var hasAuthorization = function(req, res, next) {
-  console.log('alo');
-  console.log(req.drive);
   if (!(req.user.isAdmin || req.drive.created_by.id !== req.user.id)) {
     return res.status(401).send('User is not authorized');
   }
@@ -19,6 +17,9 @@ module.exports = function(Drives, app, auth, database) {
   app.route('/drives')
     .get(drives.all)
     .post(auth.requiresLogin, drives.create);
+
+  app.route('/drives/public')
+    .get(drives.public);
 
   app.route('/drives/:driveId')
     .get(auth.isMongoId, drives.show)

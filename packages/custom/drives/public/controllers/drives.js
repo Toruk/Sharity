@@ -23,7 +23,6 @@ angular
         return false;
       }
 
-      console.log(drive);
       return $scope.global.isAdmin || (drive.created_by._id === $scope.global.user._id);
       // return drive.public || $scope.global.isAdmin || isUserAuthorized();
     };
@@ -85,6 +84,13 @@ angular
       Drives.query(function(drives) {
         $scope.drives = drives;
       });
+    };
+
+    $scope.findPublic = function() {
+      $http.get('/drives/public')
+        .success(function(drives) {
+          $scope.drives = drives;
+        });
     };
 
     $scope.findOne = function() {
@@ -150,4 +156,3 @@ console.info('onCancelItem', fileItem, response, status, headers);
     
   }
 ]);
-
