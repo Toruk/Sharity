@@ -63,7 +63,6 @@ DriveSchema.methods.hasAuthorization = function(user) {
 }
 
 DriveSchema.methods.mkdir = function(cb) {
-  // mkdir -p drive_root
   try {
     fs.mkdirSync('drives/'+this._id);
   } catch(e) {
@@ -76,4 +75,3 @@ DriveSchema.methods.mkdir = function(cb) {
 };
 
 mongoose.model('Drive', DriveSchema);
-

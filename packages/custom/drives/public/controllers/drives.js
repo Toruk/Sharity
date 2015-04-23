@@ -24,7 +24,6 @@ angular
       }
 
       return $scope.global.isAdmin || (drive.created_by._id === $scope.global.user._id);
-      // return drive.public || $scope.global.isAdmin || isUserAuthorized();
     };
 
     $scope.create = function(isValid) {

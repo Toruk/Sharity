@@ -21,7 +21,7 @@ Drives.register(function(app, auth, database) {
 
   //We are adding a link to the main menu for all authenticated users
   Drives.menus.add({
-    title: 'Drives',
+    title: 'My Drives',
     link: 'drives root',
     roles: ['authenticated'],
     menu: 'main',
