@@ -34,11 +34,10 @@ angular
           public: this.public,
           users: this.users
         });
-
         drive.$save(function(response) {
           $location.path('drives/' + response._id);
         });
-
+        console.log(this);
         this.name = '';
         this.public = false;
         this.users = [];

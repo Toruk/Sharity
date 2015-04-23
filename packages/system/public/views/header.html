@@ -8,6 +8,7 @@
             <li data-ng-repeat="item in menus.main | orderBy:'order'" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
                 <a mean-token="item.link" ui-sref='{{item.link}}'>{{item.title}}</a>
             </li>
+            </li>
         </ul>
     </div>
 

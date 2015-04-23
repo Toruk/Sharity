@@ -14,7 +14,7 @@
           </a>
         </span>
       </h2>
-      <small>Created on {{drive.created | date:'medium'}}</small>
+      <small>Created on {{drive.created | date:'medium'}} by {{drive.created_by.username}}</small>
       <div >
         <small>
           Shared with 
@@ -38,54 +38,49 @@
     <!-- Right panel -->
     <div class="col-md-5" style="margin-bottom: 40px;">
   
-      <h3>Share with</h3>
-
-      <form name="shareDriveForm" class="col-md-12" role="form" data-ng-submit="update(shareDriveForm.$valid)" novalidate>
-        <!-- Public/Private -->
-        <div class="form-group">
-          <label for="public" class="col-md-3 control-label">Everyone (public)</label>
-          <div class="col-md-9">
-            <div class="onoffswitch">
-              <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox form-control" ng-model="drive.public" id="public" ng-click="update(shareDriveForm.$valid)" checked>
-              <label class="onoffswitch-label" for="public">
-                <span class="onoffswitch-inner">
-                  <span class="onoffswitch-active"><span class="onoffswitch-switch">ON</span></span>
-                  <span class="onoffswitch-inactive"><span class="onoffswitch-switch">OFF</span></span>
-                </span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Users -->
-        <div data-ng-show="!drive.public" class="col-md-11">
-          <div class="col-md-11">
-            <div class="form-group form-horizontal" ng-class="{ 'has-error' : submitted && shareDriveForm.users.$invalid }">
-              <!-- <label for="users" class="col-md-3 control-label">Users</label> -->
-              <div class="col-md-12">
-                <tags-input name="users" id="users" ng-model="drive.users" key-property="_id" display-property="username" add-from-autocomplete-only="true" placeholder="Miranda, John, ...">
-                  <auto-complete source="autocompleteUser($query)"></auto-complete>
-                </tags-input>
-                <div ng-show="submitted && shareDriveForm.users.$invalid" class="help-block">
-                  <p>Please enter a valid username</p>
-                </div>
+      <div data-ng-if="hasAuthorization(drive)">
+        <h3>Share with</h3>
+        
+        <form name="shareDriveForm" class="col-md-12" role="form" data-ng-submit="update(shareDriveForm.$valid)" novalidate>
+          <!-- Public/Private -->
+          <div class="form-group">
+            <label for="public" class="col-md-3 control-label">Everyone (public)</label>
+            <div class="col-md-9">
+              <div class="onoffswitch">
+                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox form-control" ng-model="drive.public" id="public" ng-click="update(shareDriveForm.$valid)" checked>
+                <label class="onoffswitch-label" for="public">
+                  <span class="onoffswitch-inner">
+                    <span class="onoffswitch-active"><span class="onoffswitch-switch">ON</span></span>
+                    <span class="onoffswitch-inactive"><span class="onoffswitch-switch">OFF</span></span>
+                  </span>
+                </label>
               </div>
             </div>
           </div>
           
-          <!-- Add button -->
-          <div class="form-group">
-            <div class="col-md-1">
+          <!-- Users -->
+          <div data-ng-show="!drive.public" class="row col-md-12">
+            <div class="form-group col-md-11" ng-class="{ 'has-error' : submitted && shareDriveForm.users.$invalid }">
+              <tags-input name="users" id="users" ng-model="drive.users" key-property="_id" display-property="username" add-from-autocomplete-only="true" placeholder="Miranda, John, ...">
+                <auto-complete source="autocompleteUser($query)"></auto-complete>
+              </tags-input>
+              <div ng-show="submitted && shareDriveForm.users.$invalid" class="help-block">
+                <p>Please enter a valid username</p>
+              </div>
+            </div>
+            
+            <!-- Add button -->
+            <div class="form-group col-md-1">
               <button type="submit" class="btn btn-primary">
                 <span class="glyphicon glyphicon-plus"></span>
               </button>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
 
       <!-- Upload files -->
-      <h3>Upload more</h3>
+      <h3>Upload more files</h3>
 
       <div class="fileUpload btn btn-primary">
           <span>Upload files</span>

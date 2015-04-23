@@ -29,6 +29,7 @@ exports.create = function(req, res) {
   drive.users = [];
   drive.created_by = req.user;
 
+  console.log(drive);
   console.log(req.body);
 
   drive.mkdir(function(err) {

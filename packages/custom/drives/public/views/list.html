@@ -1,4 +1,21 @@
 <section data-ng-controller="DrivesController" data-ng-init="find()">
+  <form name="driveForm" role="form" data-ng-submit="create(driveForm.$valid)" novalidate>
+    <div class="row">
+      <!-- Drive Name -->
+      <div class="form-group col-md-3" ng-class="{ 'has-error' : submitted && driveForm.name.$invalid }">
+        <input name="name" type="text" class="form-control" data-ng-model="name" id="name" placeholder="Name" required>
+        <div ng-show="submitted && driveForm.name.$invalid" class="help-block">
+          <p ng-show="driveForm.name.$error.required">Name is required</p>
+        </div>
+      </div>  
+      <!-- Submit -->
+      <div class="form-group col-md-9">
+        <button type="submit" ng-disabled="driveForm.$invalid" class="btn btn-primary">Add a drive!</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Drives list -->
   <data-ng-include src="'drives/views/partial_list.html'"></data-ng-include>
   <h2 data-ng-hide="!drives || drives.length">No drives yet. <br> Why don't you <a href="/#!/drives/create">Create One</a>?</h2>
 </section>
