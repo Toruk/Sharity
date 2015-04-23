@@ -10,53 +10,94 @@ var mongoose = require('mongoose'),
 
 
 /**
- * Find file by id
+ * Find file by name in a drive
  */
-exports.file = function(req, res, next, id) {
-  File.load(id, function(err, file) {
-    if (err) return next(err);
-    if (!file) return next(new Error('Failed to load file ' + id));
-    req.file = file;
-    next();
-  });
+
+exports.fileName = function(req, res, next, fileName) {
+  File
+    .findOne({'drive': req.drive, 'name': fileName})
+    .populate('user', 'username')
+    .exec(function(err, file) {
+      if (err) return next(err);
+      if (!file) return next(new Error('Failed to load file ' + fileName));
+      req.file = file;
+      next();
+    });
+};
+
+var filerm = function(file, cb) {
+  if (file !== null) {
+    file.remove(function(err) {
+      if (err) {
+        cb(err);
+      }
+      console.log('unlink of'+file.name);
+      fs.unlink('./drives/'+file.drive+'/'+file.name, function (err) {
+        if (err && err.code !== 'ENOENT')
+          cb(err);
+      });
+      cb(null);
+    });
+  } else
+    cb(null);
 };
 
 /**
- * Create a file after its upload
+ * Create a file after its upload in a temporary path
  */
-exports.create = function(req, res) {
+exports.upload = function(req, res) {
   var drive = req.drive;
-  var file = new File({
-    name: req.files.file.originalname,
-    drive: drive,
-    user: req.user,
-  });
-  console.log(file);
 
-  // mv /drives/tmpname /drives/:driveId/originalname
-  fs.rename(req.files.file.path, 'drives/' + drive._id + '/' + req.files.file.originalname, function(err) {
-    if (err) {
-      if (err.code === 'ENOENT') {
-        return res.status(500).json({error: 'The drive folder does not exist'});
-      } else {
-        return res.status(500).json({error: 'Failed to save the file'});
-      }
-    }
+  var properties = {
+    'name': req.files.file.originalname,
+    'drive': drive
+  };
 
-    file.save(function(err) {
-      if (err) {
-        return res.status(500).json({
-          error: err.type
+  File.findOne(properties).exec(function(err, file) {
+    filerm(file, function(err){
+      file = new File(properties);
+      file.user = req.user;
+
+      // Move the file in its drive directory
+      // mv /drives/tmpname /drives/:driveId/originalname
+      console.log('rename of'+file.name);
+      fs.rename(req.files.file.path, 'drives/' + drive._id + '/' + file.name, function(err) {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            return res.status(404).json({error: 'The drive folder does not exist'});
+          } else {
+            return res.status(500).json({error: 'Failed to save the file'});
+          }
+        }
+
+        file.save(function(err) {
+          if (err) {
+            console.log('something went wrong: '+ err);
+            filerm(file, function(err) {
+              console.log('label err: '+err);
+              // data was deleted
+            });
+            return res.status(500).json({
+              error: err.type
+            });
+          }
+
+          file.populate('user', 'username', function(err, file) {
+            if (err)
+            {
+              console.log(err);
+            }
+            res.json(file);
+          });
         });
-      }
-      res.json(file);
+      });
     });
   });
 };
 
 /**
  * Update an file
- */
+ *
 exports.update = function(req, res) {
   var file = req.file;
 
@@ -69,9 +110,9 @@ exports.update = function(req, res) {
       });
     }
     res.json(file);
-
   });
 };
+*/
 
 /**
  * Delete a file
@@ -79,8 +120,8 @@ exports.update = function(req, res) {
 exports.destroy = function(req, res) {
   var file = req.file;
 
-  file.remove(function(err) {
-    if (err) {
+  filerm(file, function(err) {
+    if (err && err.code !== 'ENOENT') {
       return res.status(500).json({
         error: 'Cannot delete the file'
       });
@@ -92,17 +133,18 @@ exports.destroy = function(req, res) {
 /**
  * Show a file
  */
-exports.show = function(req, res) {
-  res.json(req.file);
+exports.serve = function(req, res) {
+  res.sendFile(req.drive._id+'/'+req.file.name, {root: './drives/'});
 };
 
 /**
  * List of Files of a drive
  */
-exports.all = function(req, res) {
-  File.find().where({'drive': req.drive}).equals(req.drive._id)
-    .sort('-created')
-    .populate('user', 'name username')
+exports.list = function(req, res) {
+  File
+    .find({'drive': req.drive})
+    .sort('name')
+    .populate('user', 'username')
     .exec(function(err, files) {
     if (err) {
       return res.status(500).json({

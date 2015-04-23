@@ -1,5 +1,5 @@
 .form-horizontal .control-label {
-    text-align: left;
+  text-align: left;
 }
 .onoffswitch {
   position: relative; width: 100px;
@@ -54,7 +54,6 @@
   margin-left: 0;
 }
 
-
 .file-drop-over {
   -moz-box-shadow: 0 0 3px red;
   -webkit-box-shadow: 0 0 3px red;
@@ -77,3 +76,4 @@
   opacity: 0;
   filter: alpha(opacity=0);
 }
+

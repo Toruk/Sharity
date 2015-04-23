@@ -22,10 +22,11 @@ module.exports = function(Drives, app, auth, database) {
     .get(drives.public);
 
   app.route('/drives/:driveId')
-    .get(auth.isMongoId, drives.show)
+    .get(auth.isMongoId, auth.requiresLogin, drives.show)
     .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, drives.update)
     .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, drives.destroy);
 
   //Setting up the driveId param
   app.param('driveId', drives.drive);
 };
+

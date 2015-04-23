@@ -52,10 +52,15 @@ DriveSchema.statics.load = function(id, cb) {
   {
     this.findOne({
       _id: id
-    // }).populate([{ path: 'users', select: 'name username' }, { path: 'creator', select: 'name username' }]).exec(cb);
     }).populate('created_by', 'name username').populate('users', 'name username').exec(cb);
   }
 };
+
+DriveSchema.methods.hasAuthorization = function(user) {
+  if (this.created_by.id == user.id || this.users.indexOf(user._id) > -1)
+    return true;
+  return false;
+}
 
 DriveSchema.methods.mkdir = function(cb) {
   // mkdir -p drive_root

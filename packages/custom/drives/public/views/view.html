@@ -1,11 +1,10 @@
-<section data-ng-controller="DrivesController" data-ng-init="findOne()">
-
+<section data-ng-controller="DrivesController" data-ng-init="findOne()" class="container">
   <div class="row">
-    <!-- Left panel -->
-    <div class="col-md-7">
+    <!-- Left panel 7/12 -->
+    <div class="col-md-7" style="margin-bottom: 80px;">
       <h2>
         <span>Drive {{drive.name}}</span>
-        <span data-ng-if="hasAuthorization(drive)">
+        <span data-ng-if="isOwner(drive)">
           <a class="btn" href="/#!/drives/{{drive._id}}/edit">
             <i class="glyphicon glyphicon-edit"></i>
           </a>
@@ -23,135 +22,115 @@
           <span data-ng-if="!drive.public && !drive.users.length">no one</span>
         </small>
       </div>
-
-      <ul class="files unstyled">
-        <li data-ng-repeat="file in drive.files">
-          <h3>
-            <a data-ng-href="#!/files/{{file._id}}">{{file.name}}</a>
-          </h3>
-          <span>{{file.created | date:'medium'}}</span> /
-          <span>{{file.user.username}}</span>
-        </li>
-      </ul>
+      
+      <data-ng-include src="'files/views/list.html'"></data-ng-include>
     </div>
 
-    <!-- Right panel -->
-    <div class="col-md-5" style="margin-bottom: 40px;">
-  
-      <div data-ng-if="hasAuthorization(drive)">
-        <h3>Share with</h3>
-        
-        <form name="shareDriveForm" class="col-md-12" role="form" data-ng-submit="update(shareDriveForm.$valid)" novalidate>
-          <!-- Public/Private -->
-          <div class="form-group">
-            <label for="public" class="col-md-3 control-label">Everyone (public)</label>
-            <div class="col-md-9">
-              <div class="onoffswitch">
-                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox form-control" ng-model="drive.public" id="public" ng-click="update(shareDriveForm.$valid)" checked>
-                <label class="onoffswitch-label" for="public">
-                  <span class="onoffswitch-inner">
-                    <span class="onoffswitch-active"><span class="onoffswitch-switch">ON</span></span>
-                    <span class="onoffswitch-inactive"><span class="onoffswitch-switch">OFF</span></span>
-                  </span>
-                </label>
-              </div>
+    <!-- Right panel 5/12 -->
+    <div class="col-md-5">
+      <!-- Permissions form block -->
+      <h3>Share with</h3>
+      <form class="form-horizontal" name="shareDriveForm" role="form" data-ng-submit="update(shareDriveForm.$valid)" novalidate>
+        <!-- Public/Private form group -->
+        <div class="form-group">
+          <div class="col-md-4">
+          <label for="public" class="group-label"><strong>Everyone (public)</strong></label>
+          </div>
+          <div class="col-md-8">
+            <div class="onoffswitch">
+              <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox checkbox" ng-model="drive.public" id="public" ng-click="update(shareDriveForm.$valid)" checked>
+              <label class="onoffswitch-label" for="public">
+                <span class="onoffswitch-inner">
+                  <span class="onoffswitch-active"><span class="onoffswitch-switch">ON</span></span>
+                  <span class="onoffswitch-inactive"><span class="onoffswitch-switch">OFF</span></span>
+                </span>
+              </label>
             </div>
           </div>
-          
-          <!-- Users -->
-          <div data-ng-show="!drive.public" class="row col-md-12">
-            <div class="form-group col-md-11" ng-class="{ 'has-error' : submitted && shareDriveForm.users.$invalid }">
-              <tags-input name="users" id="users" ng-model="drive.users" key-property="_id" display-property="username" add-from-autocomplete-only="true" placeholder="Miranda, John, ...">
-                <auto-complete source="autocompleteUser($query)"></auto-complete>
-              </tags-input>
-              <div ng-show="submitted && shareDriveForm.users.$invalid" class="help-block">
-                <p>Please enter a valid username</p>
-              </div>
-            </div>
-            
-            <!-- Add button -->
-            <div class="form-group col-md-1">
-              <button type="submit" class="btn btn-primary">
-                <span class="glyphicon glyphicon-plus"></span>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <!-- Upload files -->
-      <h3>Upload more files</h3>
-
-      <div class="fileUpload btn btn-primary">
-          <span>Upload files</span>
-          <input type="file" class="upload" nv-file-select="" uploader="uploader" multiple/><br/>
-      </div>
-      <div class="upload" ng-show="uploader.isHTML5">
-        <div class="well" nv-file-over over-class="file-drop-over" nv-file-drop uploader="uploader">
-          Drop files here
         </div>
-      </div>
 
-      <table class="table">
-        <thead>
-          <tr>
-            <th width="50%">Name</th>
-            <th ng-show="uploader.isHTML5">Size</th>
-            <th ng-show="uploader.isHTML5">Progress</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="item in uploader.queue">
-            <td><strong>{{ item.file.name }}</strong></td>
-            <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
-            <td class="text-center">
-              <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-              <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-              <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-            </td>
-            <td nowrap>
-              <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
-                <span class="glyphicon glyphicon-upload"></span>
-              </button>
-              <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
-                <span class="glyphicon glyphicon-ban-circle"></span>
-              </button>
-              <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
-                <span class="glyphicon glyphicon-trash"></span>
-              </button>
-            </td>
-
+        <!-- Users form group-->
+        <div class="form-group" data-ng-show="!drive.public">
+          <!-- Users input 9/12 -->
+          <div class="col-md-9" ng-class="{ 'has-error' : submitted && shareDriveForm.users.$invalid }">
+            <tags-input name="users" id="users" ng-model="drive.users" key-property="_id" display-property="username" add-from-autocomplete-only="true" placeholder="Miranda, John, ...">
+              <auto-complete source="autocompleteUser($query)"></auto-complete>
+            </tags-input>
+            <div ng-show="submitted && shareDriveForm.users.$invalid" class="help-block">
+              <p>Please enter a valid username</p>
+            </div>
+          </div>
             
-            <td ng-show="uploader.isHTML5">
-              <div class="progress" style="margin-bottom: 0;">
-                <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
-              </div>
-            </td>
-
-          </tr>
-        </tbody>
-      </table>
-      
-      <p>Queue length: {{ uploader.queue.length }} / {{ uploader.queue.limit }}</p>
-
+          <!-- Add button 3/12 -->
+          <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+          </div>
+        </div>
+      </form>
+      <!-- Upload files block -->
+      <h3>Upload more</h3>
       <div>
-        <div>
-          Queue progress:
-          <div class="progress" style="">
-            <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+          <div class="fileUpload btn btn-primary">
+            <span>Select your files...</span>
+            <input type="file" class="upload" nv-file-select="" uploader="uploader" multiple/>
           </div>
+          <div class="btn-primary" style="padding: 1px;" ng-show="uploader.isHTML5">
+            <div class="well" style="margin: 0;" nv-file-over over-class="file-drop-over" nv-file-drop uploader="uploader">...or drop them here!</div>
+          </div>
+      </div>
+      <!-- Upload queue -->
+      <div ng-show="uploader.queue.length">
+        <table class="table">
+          <thead>
+            <tr><th width="50%">Name</th><th ng-show="uploader.isHTML5">Size</th><th ng-show="uploader.isHTML5">Progress</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in uploader.queue">
+              <td><strong>{{ item.file.name }}</strong></td>
+              <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+              <td ng-show="uploader.isHTML5">
+                <div class="progress" style="margin-bottom: 0;">
+                  <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                </div>
+              </td>                
+              <td class="text-center">
+                <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+              </td>              <td nowrap>
+                <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                  <span class="glyphicon glyphicon-upload"></span>
+                </button>
+                <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                  <span class="glyphicon glyphicon-ban-circle"></span>
+                </button>
+                <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                  <span class="glyphicon glyphicon-trash"></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
+          <div>
+            <p>Queue length: {{ uploader.queue.length }} / {{ uploader.queue.limit }}</p>
+            <p>Queue progress:</p>
+            <div class="progress" style="">
+              <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+            <span class="glyphicon glyphicon-upload"></span> Upload all
+          </button>
+          <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+            <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+          </button>
+          <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+            <span class="glyphicon glyphicon-trash"></span> Remove all
+          </button>
         </div>
-        <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
-          <span class="glyphicon glyphicon-upload"></span> Upload all
-        </button>
-        <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
-          <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-        </button>
-        <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
-          <span class="glyphicon glyphicon-trash"></span> Remove all
-        </button>
       </div>
     </div>
   </div>

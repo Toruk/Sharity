@@ -29,12 +29,10 @@ exports.create = function(req, res) {
   drive.users = [];
   drive.created_by = req.user;
 
-  console.log(drive);
-  console.log(req.body);
-
   drive.mkdir(function(err) {
     if (err) {
       if (err.code === 'ENOENT') {
+        console.log(err);
         return res.status(500).json({error: 'The drive folder does not exist'});
       } else {
         console.log(err);
@@ -43,11 +41,14 @@ exports.create = function(req, res) {
     }
 
     drive.save(function(err) {
+      console.log('drive saved');
       if (err) {
+        console.log(err);
         return res.status(500).json({
           error: 'Cannot create the drive'
         });
       }
+      console.log('drive created: '+drive);
       res.json(drive);
     });
   });
@@ -87,7 +88,7 @@ exports.destroy = function(req, res) {
   drive.remove(function(err) {
     if (err) {
       return res.status(500).json({
-	error: 'Cannot delete the drive'
+        error: 'Cannot delete the drive'
       });
     }
     res.json(drive);
@@ -98,7 +99,7 @@ exports.destroy = function(req, res) {
  * Show a drive
  */
 exports.show = function(req, res) {
-  req.drive.files = [{'name': 'file1'}, {'name': 'file2'}];
+  //req.drive.files = [{'name': 'file1'}, {'name': 'file2'}];
   res.json(req.drive);
 };
 
@@ -131,3 +132,4 @@ exports.public = function(req, res) {
       res.json(drives);
     });
 };
+

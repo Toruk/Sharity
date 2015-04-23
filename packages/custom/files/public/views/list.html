@@ -1,0 +1,17 @@
+<div data-ng-controller="FilesController" data-ng-init="bindFilesList()">
+  <h3>Files</h3>
+  <ul class="files unstyled">
+    <li data-ng-repeat="file in files">
+      <h4>
+        <a target="_self" href="/drives/{{file.drive}}/files/{{file.name}}" download="{{file.name}}">{{file.name}}</a>
+        <span data-ng-if="hasAuthorization(file)">
+          <a class="btn" data-ng-click="remove(file);">
+            <i class="glyphicon glyphicon-trash"></i>
+          </a>
+        </span>
+      </h4>
+      <small>Uploaded on {{file.created | date:'medium'}} by {{file.user.username}}</small>
+    </li>
+  </ul>
+  <h4 data-ng-hide="!files || files.length">No files yet.</h4>
+</div>
