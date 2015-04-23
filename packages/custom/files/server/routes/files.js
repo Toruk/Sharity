@@ -5,8 +5,8 @@ var files = require('../controllers/files');
 
 
 // Drive authorization helpers
-var hasAuthorization = function(req, res, next) {
-  if (!req.drive.hasAuthorization(req.user)) {
+var isOwner = function(req, res, next) {
+  if (!req.drive.isOwner(req.user)) {
     return res.status(401).send('User is not authorized');
   }
   next();
@@ -21,9 +21,8 @@ module.exports = function(Files, app, auth, database) {
     .get(auth.requiresLogin, files.list)
     .post(auth.requiresLogin, files.upload);
   app.route('/drives/:driveId/files/:fileName')
-    .get(auth.requiresLogin, hasAuthorization, files.serve)
-    //.put(auth.requiresLogin, hasAuthorization. files.update)
-    .delete(auth.requiresLogin, hasAuthorization, files.destroy);
+    .get(auth.requiresLogin, isOwner, files.serve)
+    .delete(auth.requiresLogin, isOwner, files.destroy);
 
   app.param('driveId', drives.drive);
   app.param('fileName', files.fileName);

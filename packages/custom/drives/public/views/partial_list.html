@@ -2,7 +2,7 @@
   <li data-ng-repeat="drive in drives">
     <h2>
       <a data-ng-href="/#!/drives/{{drive._id}}">{{drive.name}}</a>
-      <span data-ng-if="hasAuthorization(drive)">
+      <span data-ng-if="isOwner(drive)">
         <a class="btn" href="/#!/drives/{{drive._id}}/edit">
             <i class="glyphicon glyphicon-edit"></i>
         </a>

@@ -4,7 +4,7 @@
     <li data-ng-repeat="file in files">
       <h4>
         <a target="_self" href="/drives/{{file.drive}}/files/{{file.name}}" download="{{file.name}}">{{file.name}}</a>
-        <span data-ng-if="hasAuthorization(file)">
+        <span data-ng-if="isOwner(file)">
           <a class="btn" data-ng-click="remove(file);">
             <i class="glyphicon glyphicon-trash"></i>
           </a>

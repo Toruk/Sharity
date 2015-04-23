@@ -10,13 +10,11 @@ angular
       name: 'files'
     };
     
-    $scope.hasAuthorization = function(file) {
+    $scope.isOwner = function(file) {
       if (!file)
         return false;
 
       return true;
-      //return $scope.global.isAdmin || (file.user._id === $scope.global.user._id);
-      // return file.public || $scope.global.isAdmin || isUserAuthorized();
     };
 
     $scope.remove = function(file) {

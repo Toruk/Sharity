@@ -3,7 +3,7 @@
 var drives = require('../controllers/drives');
 
 // Drive authorization helpers
-var hasAuthorization = function(req, res, next) {
+var isOwner = function(req, res, next) {
   if (!(req.user.isAdmin || req.drive.created_by.id !== req.user.id)) {
     return res.status(401).send('User is not authorized');
   }
@@ -23,8 +23,8 @@ module.exports = function(Drives, app, auth, database) {
 
   app.route('/drives/:driveId')
     .get(auth.isMongoId, auth.requiresLogin, drives.show)
-    .put(auth.isMongoId, auth.requiresLogin, hasAuthorization, drives.update)
-    .delete(auth.isMongoId, auth.requiresLogin, hasAuthorization, drives.destroy);
+    .put(auth.isMongoId, auth.requiresLogin, isOwner, drives.update)
+    .delete(auth.isMongoId, auth.requiresLogin, isOwner, drives.destroy);
 
   //Setting up the driveId param
   app.param('driveId', drives.drive);

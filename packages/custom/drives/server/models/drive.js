@@ -56,7 +56,7 @@ DriveSchema.statics.load = function(id, cb) {
   }
 };
 
-DriveSchema.methods.hasAuthorization = function(user) {
+DriveSchema.methods.isOwner = function(user) {
   if (this.created_by.id == user.id || this.users.indexOf(user._id) > -1)
     return true;
   return false;
